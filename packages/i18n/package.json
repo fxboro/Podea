@@ -1,0 +1,10 @@
+{
+  "name": "@podea/i18n",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "private": true,
+  "dependencies": {
+    "i18next": "^23.15.1",
+    "react-i18next": "^15.0.2"
+  }
+}

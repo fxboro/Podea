@@ -1,0 +1,61 @@
+/* Podea Design System Tokens */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap');
+
+:root {
+  /* Colors */
+  --color-bg-base: #F4EFEA;
+  --color-bg-surface: #FCFAF8;
+  
+  --color-primary-text: #1F2A37;
+  --color-primary-muted: #374151;
+  
+  --color-accent: #C7A75D;
+  --color-accent-hover: #b5954a;
+  
+  --color-status-success: #4A6C5C;
+  --color-status-warning: #BE5A5A;
+  --color-status-warning-bg: #FDF5F5;
+
+  /* Typography */
+  --font-family-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-family-serif: 'Playfair Display', Georgia, serif;
+  
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 9999px;
+
+  /* Shadows */
+  --shadow-soft: 0 4px 20px -2px rgba(31, 42, 55, 0.05);
+  
+  /* Grid & Spacing */
+  --max-w-7xl: 1280px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+
+  /* Transitions */
+  --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base Body Styles utilizing Tokens */
+body {
+  background-color: var(--color-bg-base);
+  color: var(--color-primary-text);
+  font-family: var(--font-family-sans);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, .font-serif {
+  font-family: var(--font-family-serif);
+  color: var(--color-primary-text);
+  font-weight: 500;
+}

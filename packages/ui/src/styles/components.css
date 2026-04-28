@@ -1,0 +1,117 @@
+/* Podea Core Components */
+
+/* BUTTONS */
+.podea-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 24px;
+  font-family: var(--font-family-sans);
+  font-weight: 500;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.podea-btn-primary {
+  background-color: var(--color-primary-text);
+  color: var(--color-bg-surface);
+  border-radius: var(--radius-pill);
+}
+
+.podea-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-soft);
+  background-color: var(--color-primary-muted);
+}
+
+.podea-btn-secondary {
+  background-color: transparent;
+  color: var(--color-primary-text);
+  border: 1px solid var(--color-primary-text);
+  border-radius: var(--radius-pill);
+}
+
+.podea-btn-secondary:hover {
+  background-color: rgba(31, 42, 55, 0.05); /* very light hover */
+}
+
+.podea-btn-accent {
+  background-color: var(--color-accent);
+  color: #FFFFFF;
+  border-radius: var(--radius-pill);
+}
+
+.podea-btn-accent:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-soft);
+  background-color: var(--color-accent-hover);
+}
+
+/* CARDS */
+.podea-card {
+  background-color: var(--color-bg-surface);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-soft);
+  transition: var(--transition-smooth);
+}
+
+.podea-card-large {
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+}
+
+.podea-card-upsell {
+  border-top: 4px solid var(--color-accent);
+}
+
+/* INPUTS */
+.podea-input-group {
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+}
+
+.podea-label {
+  font-size: 14px;
+  color: var(--color-primary-muted);
+  margin-bottom: var(--spacing-xs);
+  font-weight: 500;
+}
+
+.podea-input {
+  background-color: var(--color-bg-surface);
+  border: 1px solid #E5E7EB; /* Light gray border */
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 16px; /* Prevents iOS auto-zoom */
+  color: var(--color-primary-text);
+  outline: none;
+  font-family: var(--font-family-sans);
+  transition: var(--transition-smooth);
+}
+
+.podea-input:focus {
+  border-color: var(--color-primary-text);
+  box-shadow: 0 0 0 1px var(--color-primary-text);
+}
+
+/* MEDICAL ALERTS */
+.podea-medical-alert {
+  background-color: var(--color-status-warning-bg);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  align-items: center;
+  color: var(--color-status-warning);
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid rgba(190, 90, 90, 0.2);
+}
+
+.podea-medical-alert-icon {
+  margin-right: var(--spacing-sm);
+  flex-shrink: 0;
+}

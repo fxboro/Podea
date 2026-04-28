@@ -1,0 +1,22 @@
+import * as schemas from './schemas';
+import { z } from 'zod';
+
+export type Studio = z.infer<typeof schemas.StudioSchema>;
+export type User = z.infer<typeof schemas.UserSchema>;
+export type Membership = z.infer<typeof schemas.MembershipSchema>;
+export type Client = z.infer<typeof schemas.ClientSchema>;
+export type RiskFlag = z.infer<typeof schemas.RiskFlagSchema>;
+export type Appointment = z.infer<typeof schemas.AppointmentSchema>;
+export type Checkin = z.infer<typeof schemas.CheckinSchema>;
+export type Service = z.infer<typeof schemas.ServiceSchema>;
+export type Treatment = z.infer<typeof schemas.TreatmentSchema>;
+export type ConsentTemplate = z.infer<typeof schemas.ConsentTemplateSchema>;
+export type Consent = z.infer<typeof schemas.ConsentSchema>;
+export type AddOn = z.infer<typeof schemas.AddOnSchema>;
+export type Product = z.infer<typeof schemas.ProductSchema>;
+export type InventoryLog = z.infer<typeof schemas.InventoryLogSchema>;
+export type UpsellRule = z.infer<typeof schemas.UpsellRuleSchema>;
+export type AuditLog = z.infer<typeof schemas.AuditLogSchema>;
+export type Dashboard = z.infer<typeof schemas.DashboardSchema>;
+export type IntakeFormTemplate = z.infer<typeof schemas.IntakeFormTemplateSchema>;
+export type IntakeFormSubmission = z.infer<typeof schemas.IntakeFormSubmissionSchema>;

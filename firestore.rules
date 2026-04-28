@@ -1,12 +1,165 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
+    
+    // --- AUTH UTILITIES ---
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isStudioStaff(studioId) {
+      return isAuthenticated() && request.auth.token.studioId == studioId;
+    }
+    
+    function hasRole(role) {
+      return isAuthenticated() && request.auth.token.role == role;
+    }
+
+    function isPlatformAdmin() {
+      return hasRole('platform_admin');
+    }
+
+    function isStudioAdmin(studioId) {
+      return isStudioStaff(studioId) && hasRole('studio_admin');
+    }
+
+    function isPractitioner(studioId) {
+      return isStudioStaff(studioId) && hasRole('practitioner');
+    }
+
+    function isFrontdesk(studioId) {
+      return isStudioStaff(studioId) && hasRole('frontdesk');
+    }
+
+    // --- GLOBAL RULES ---
+
+    // Global User Profiles
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Invitations
+    match /invites/{inviteId} {
+      allow read: if true; // Allow checking invite validity before login
+      allow create: if isPlatformAdmin() || (isAuthenticated() && hasRole('studio_admin'));
+      allow delete: if isPlatformAdmin() || (isAuthenticated() && hasRole('studio_admin'));
+    }
+
+    // --- TENANT RULES (STUDIOS) ---
+
     match /studios/{studioId} {
-      allow read, write: if request.auth != null && request.auth.token.studioId == studioId;
+      // Platform Admins have full access to everything
+      allow read, write: if isPlatformAdmin();
       
-      match /{document=**} {
-        allow read, write: if request.auth != null && request.auth.token.studioId == studioId;
+      // General Studio Access
+      allow read: if isStudioStaff(studioId);
+      
+      // Config Modification Restricted to Studio Admins
+      match /_config/{docId} {
+        allow read: if isStudioStaff(studioId);
+        allow write: if isStudioAdmin(studioId);
       }
+
+      // Staff Management
+      match /staff/{staffId} {
+        allow read: if isStudioStaff(studioId);
+        allow write: if isStudioAdmin(studioId);
+      }
+
+      // Client Management
+      match /clients/{clientId} {
+        allow read: if isStudioStaff(studioId);
+        allow create, update: if isStudioStaff(studioId);
+        allow delete: if isStudioAdmin(studioId);
+      }
+
+      // Memberships
+      match /memberships/{membershipId} {
+        allow read: if isStudioStaff(studioId);
+        allow write: if isStudioAdmin(studioId);
+      }
+
+      // Services, Add-ons, Products (Catalog)
+      match /services/{serviceId} {
+        allow read: if isStudioStaff(studioId);
+        allow write: if isStudioAdmin(studioId);
+      }
+      match /add_ons/{addOnId} {
+        allow read: if isStudioStaff(studioId);
+        allow write: if isStudioAdmin(studioId);
+      }
+      match /products/{productId} {
+        allow read: if isStudioStaff(studioId);
+        allow write: if isStudioAdmin(studioId);
+      }
+
+      // Inventory Logs (Immutable)
+      match /inventory_logs/{logId} {
+        allow read: if isStudioStaff(studioId);
+        allow write: if false;
+      }
+
+      // Appointments & Checkins
+      match /appointments/{appId} {
+        allow read, write: if isStudioStaff(studioId);
+      }
+      match /checkins/{checkinId} {
+        allow read, write: if isStudioStaff(studioId);
+      }
+
+      // Consents & Intake Forms
+      match /consent_templates/{templateId} {
+        allow read: if isStudioStaff(studioId);
+        allow write: if isStudioAdmin(studioId);
+      }
+      match /intake_templates/{templateId} {
+        allow read: if isStudioStaff(studioId);
+        allow write: if isStudioAdmin(studioId);
+      }
+      match /intake_submissions/{submissionId} {
+        // Frontdesk can create (for kiosk), but only Practitioners/Admins can read/update (PHI isolation)
+        allow create: if isStudioStaff(studioId);
+        allow read, update: if isPractitioner(studioId) || isStudioAdmin(studioId);
+        allow delete: if false; // Immutable
+      }
+      match /consents/{consentId} {
+        allow read: if isStudioStaff(studioId);
+        allow create: if isStudioStaff(studioId);
+        allow update, delete: if false; // Immutable once signed
+      }
+
+      // Clinical/Charting (Isolated from frontdesk)
+      match /treatments/{treatmentId} {
+        allow read, write: if isPractitioner(studioId) || isStudioAdmin(studioId);
+      }
+      match /risk_flags/{flagId} {
+        allow read: if isStudioStaff(studioId);
+        allow write: if isPractitioner(studioId) || isStudioAdmin(studioId);
+      }
+
+      // Upsell Rules
+      match /upsell_rules/{ruleId} {
+        allow read: if isStudioStaff(studioId);
+        allow write: if isStudioAdmin(studioId);
+      }
+
+      // Dashboards
+      match /dashboards/{dashboardId} {
+        allow read, write: if isStudioStaff(studioId);
+      }
+      
+      // Audit Logs (Immutable from UI)
+      match /audit_logs/{logId} {
+        allow read: if isStudioAdmin(studioId);
+        allow write: if false; // Only Cloud Functions can write logs
+      }
+    }
+    
+    // Onboarding Drafts (Pre-Tenant)
+    match /onboarding_drafts/{userId} {
+      allow read, write: if isAuthenticated() && request.auth.uid == userId;
     }
   }
 }

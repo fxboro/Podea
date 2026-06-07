@@ -1,6 +1,9 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
+import { defineSecret } from 'firebase-functions/params';
 import { AuditLogger } from './lib/AuditLogger';
+
+const PADDLE_WEBHOOK_SECRET = defineSecret('PADDLE_WEBHOOK_SECRET');
 
 admin.initializeApp();
 
@@ -59,8 +62,14 @@ export const setCustomUserClaims = functions.https.onCall(async (data, context) 
  * Webhook Listener for Paddle / PayPal Subscription Activations.
  * This provisions the Studio and sets the initial Studio Admin claims.
  */
-export const onSubscriptionCreated = functions.https.onRequest(async (req, res) => {
+export const onSubscriptionCreated = functions.runWith({ secrets: [PADDLE_WEBHOOK_SECRET] }).https.onRequest(async (req, res) => {
   // NOTE: In production, explicitly verify the Webhook Signature from Paddle/PayPal here
+  const webhookSecret = PADDLE_WEBHOOK_SECRET.value();
+  if (req.headers['x-paddle-signature'] !== webhookSecret && process.env.FUNCTIONS_EMULATOR !== "true") {
+      console.warn("Invalid webhook signature attempt.");
+      res.status(401).send("Unauthorized webhook signature.");
+      return;
+  }
   
   const payload = req.body;
   const firebaseUid = payload.passthrough_uid || payload.custom_id; // Identity linked during checkout
@@ -212,3 +221,5 @@ export const syncUserClaims = functions.firestore
   });
 
 export * from './compliance';
+export * from './inventory';
+export * from './integrations';

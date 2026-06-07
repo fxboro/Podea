@@ -11,6 +11,10 @@ import { JoinInvite } from './pages/Auth/JoinInvite';
 import { KioskMain } from './pages/Kiosk/KioskMain';
 import { ReviewQueue } from './pages/Practitioner/ReviewQueue';
 import { TreatmentWorkspace } from './pages/Practitioner/TreatmentWorkspace';
+import { SettingsLayout } from './pages/Settings/SettingsLayout';
+import { ServicesManager } from './pages/Settings/ServicesManager';
+import { ProductsManager } from './pages/Settings/ProductsManager';
+import { AddOnsManager } from './pages/Settings/AddOnsManager';
 
 import './index.css';
 
@@ -56,6 +60,18 @@ function App() {
               <TreatmentWorkspace />
             </ProtectedRoute>
           } />
+
+          {/* Settings Sub-Router */}
+          <Route path="/settings" element={
+            <ProtectedRoute allowedRoles={['studio_admin', 'platform_admin']}>
+              <SettingsLayout />
+            </ProtectedRoute>
+          }>
+            <Route index element={<Navigate to="services" replace />} />
+            <Route path="services" element={<ServicesManager />} />
+            <Route path="addons" element={<AddOnsManager />} />
+            <Route path="inventory" element={<ProductsManager />} />
+          </Route>
 
           {/* Default Fallback */}
           <Route path="*" element={<Navigate to="/dashboard" replace />} />

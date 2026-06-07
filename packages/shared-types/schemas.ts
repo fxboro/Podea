@@ -60,8 +60,13 @@ export const ServiceSchema = baseEntity.extend({
   description: z.string().optional(),
   durationMinutes: z.number().min(1),
   price: z.number().min(0),
+  vatRate: z.number().min(0).default(0),
   colorCode: z.string().optional(),
   requiredConsentTemplateIds: z.array(z.string()).optional(),
+  consumableProductIds: z.array(z.object({
+    productId: z.string(),
+    quantity: z.number().min(0)
+  })).optional(),
   status: z.enum(['active', 'archived'])
 });
 
@@ -70,6 +75,7 @@ export const AddOnSchema = baseEntity.extend({
   name: z.string().min(1),
   durationAddedMinutes: z.number().min(0),
   price: z.number().min(0),
+  vatRate: z.number().min(0).default(0),
   applicableServiceIds: z.array(z.string()).optional(),
   status: z.enum(['active', 'archived'])
 });
@@ -78,7 +84,9 @@ export const ProductSchema = baseEntity.extend({
   id: z.string().optional(),
   sku: z.string().min(1),
   name: z.string().min(1),
+  type: z.enum(['retail', 'consumable']).default('retail'),
   price: z.number().min(0),
+  vatRate: z.number().min(0).default(0),
   stockLevel: z.number().int(),
   reorderPoint: z.number().int().optional(),
   status: z.enum(['active', 'archived'])

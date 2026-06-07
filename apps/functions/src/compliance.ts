@@ -127,3 +127,55 @@ export const reviewIntakeForm = functions.https.onCall(async (data, context) => 
 
   return { success: true };
 });
+
+/**
+ * GDPR Data Deletion Workflow (Right to be Forgotten).
+ * Scrubs all PII and PHI related to a specific client across the tenant,
+ * but retains financial aggregate data.
+ */
+export const processGdprDeletion = functions.https.onCall(async (data, context) => {
+  if (!context.auth) throw new functions.https.HttpsError('unauthenticated', 'Not logged in');
+  
+  const { studioId, clientId } = data;
+  const callerClaims = context.auth.token;
+
+  if (callerClaims.studioId !== studioId) {
+    throw new functions.https.HttpsError('permission-denied', 'Wrong studio');
+  }
+
+  // Only Studio Admins or Platform Admins can execute GDPR deletions
+  if (!['studio_admin', 'platform_admin'].includes(callerClaims.role)) {
+    throw new functions.https.HttpsError('permission-denied', 'Only admins can execute GDPR deletions');
+  }
+
+  const db = admin.firestore();
+  const batch = db.batch();
+
+  // 1. Delete Client Profile
+  const clientRef = db.doc(`studios/${studioId}/clients/${clientId}`);
+  batch.delete(clientRef);
+
+  // 2. Delete PHI / Clinical Data
+  const collectionsToScrub = ['intake_submissions', 'consents', 'treatments', 'risk_flags', 'appointments'];
+  
+  for (const collectionName of collectionsToScrub) {
+    const snapshot = await db.collection(`studios/${studioId}/${collectionName}`)
+      .where('clientId', '==', clientId)
+      .get();
+      
+    snapshot.docs.forEach(doc => {
+      batch.delete(doc.ref);
+    });
+  }
+
+  await batch.commit();
+
+  // 3. Log the deletion to the Immutable Audit Trail (Crucial for compliance)
+  await AuditLogger.logEvent(studioId, 'GDPR_DATA_DELETION', {
+    targetClientId: clientId,
+    executedBy: context.auth.uid,
+    collectionsScrubbed: collectionsToScrub
+  });
+
+  return { success: true, message: 'Client data successfully scrubbed.' };
+});

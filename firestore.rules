@@ -86,7 +86,7 @@ service cloud.firestore {
         allow read: if isStudioStaff(studioId);
         allow write: if isStudioAdmin(studioId);
       }
-      match /add_ons/{addOnId} {
+      match /addons/{addOnId} {
         allow read: if isStudioStaff(studioId);
         allow write: if isStudioAdmin(studioId);
       }
@@ -96,7 +96,7 @@ service cloud.firestore {
       }
 
       // Inventory Logs (Immutable)
-      match /inventory_logs/{logId} {
+      match /inventoryLogs/{logId} {
         allow read: if isStudioStaff(studioId);
         allow write: if false;
       }
@@ -110,15 +110,15 @@ service cloud.firestore {
       }
 
       // Consents & Intake Forms
-      match /consent_templates/{templateId} {
+      match /consentTemplates/{templateId} {
         allow read: if isStudioStaff(studioId);
         allow write: if isStudioAdmin(studioId);
       }
-      match /intake_templates/{templateId} {
+      match /intakeTemplates/{templateId} {
         allow read: if isStudioStaff(studioId);
         allow write: if isStudioAdmin(studioId);
       }
-      match /intake_submissions/{submissionId} {
+      match /intakeSubmissions/{submissionId} {
         // Frontdesk can create (for kiosk), but only Practitioners/Admins can read/update (PHI isolation)
         allow create: if isStudioStaff(studioId);
         allow read, update: if isPractitioner(studioId) || isStudioAdmin(studioId);
@@ -134,13 +134,13 @@ service cloud.firestore {
       match /treatments/{treatmentId} {
         allow read, write: if isPractitioner(studioId) || isStudioAdmin(studioId);
       }
-      match /risk_flags/{flagId} {
+      match /riskFlags/{flagId} {
         allow read: if isStudioStaff(studioId);
         allow write: if isPractitioner(studioId) || isStudioAdmin(studioId);
       }
 
       // Upsell Rules
-      match /upsell_rules/{ruleId} {
+      match /upsellRules/{ruleId} {
         allow read: if isStudioStaff(studioId);
         allow write: if isStudioAdmin(studioId);
       }
@@ -151,14 +151,14 @@ service cloud.firestore {
       }
       
       // Audit Logs (Immutable from UI)
-      match /audit_logs/{logId} {
+      match /auditLogs/{logId} {
         allow read: if isStudioAdmin(studioId);
         allow write: if false; // Only Cloud Functions can write logs
       }
     }
     
     // Onboarding Drafts (Pre-Tenant)
-    match /onboarding_drafts/{userId} {
+    match /onboardingDrafts/{userId} {
       allow read, write: if isAuthenticated() && request.auth.uid == userId;
     }
   }

@@ -158,7 +158,7 @@ service cloud.firestore {
     }
     
     // Onboarding Drafts (Pre-Tenant)
-    match /onboardingDrafts/{userId} {
+    match /onboarding_drafts/{userId} {
       allow read, write: if isAuthenticated() && request.auth.uid == userId;
     }
   }

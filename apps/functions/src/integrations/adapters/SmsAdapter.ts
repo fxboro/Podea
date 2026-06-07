@@ -20,13 +20,23 @@ export class TwilioAdapter extends SmsAdapter {
   }
 
   async sendSms(message: SmsMessage): Promise<boolean> {
-    if (!this.config.isActive) return false;
-    
-    console.log(`[TwilioAdapter] Sending SMS to ${message.to} for studio ${this.studioId}`);
-    // Twilio SDK logic goes here...
-    // const client = twilio(this.config.credentials.accountSid, this.config.credentials.authToken);
-    // await client.messages.create({...});
+    if (!this.config.isActive) {
+      console.warn(`[TwilioAdapter] Twilio is disabled for studio ${this.studioId}`);
+      return false;
+    }
 
+    // Phone number format validation
+    const cleanNumber = message.to.trim();
+    if (!cleanNumber.startsWith('+') && cleanNumber.length < 10) {
+      throw new Error(`[TwilioAdapter] Invalid phone number formatting: ${message.to}. Must start with international prefix.`);
+    }
+
+    if (!message.body || message.body.length === 0) {
+      throw new Error(`[TwilioAdapter] SMS message body cannot be empty.`);
+    }
+    
+    console.log(`[TwilioAdapter] Sending SMS to ${cleanNumber} for studio ${this.studioId}. Content: "${message.body}"`);
+    // Twilio SDK execution simulation
     return true;
   }
 }

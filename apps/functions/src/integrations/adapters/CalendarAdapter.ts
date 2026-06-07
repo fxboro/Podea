@@ -27,13 +27,20 @@ export class GoogleCalendarAdapter extends CalendarAdapter {
 
   async createEvent(event: CalendarEventPayload): Promise<string> {
     if (!this.config.isActive) return '';
-    console.log(`[GoogleCalendarAdapter] Syncing event ${event.title} to GCal for studio ${this.studioId}`);
-    
-    // Google API logic goes here...
+
+    // Validation
+    if (event.endTime <= event.startTime) {
+      throw new Error(`[GoogleCalendarAdapter] Event end time (${event.endTime.toISOString()}) must be after start time (${event.startTime.toISOString()}).`);
+    }
+
+    console.log(`[GoogleCalendarAdapter] Syncing event "${event.title}" to GCal for studio ${this.studioId}`);
     return `gcal_mock_id_${Date.now()}`;
   }
 
   async updateEvent(externalEventId: string, event: CalendarEventPayload): Promise<boolean> {
+    if (event.endTime <= event.startTime) {
+      throw new Error(`[GoogleCalendarAdapter] Event end time (${event.endTime.toISOString()}) must be after start time (${event.startTime.toISOString()}).`);
+    }
     console.log(`[GoogleCalendarAdapter] Updating event ${externalEventId}`);
     return true;
   }

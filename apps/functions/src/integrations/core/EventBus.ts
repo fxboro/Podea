@@ -21,23 +21,36 @@ export class EventBus {
   }
 
   /**
-   * Dispatch an event to all subscribers asynchronously.
+   * Dispatch an event to all subscribers asynchronously with built-in retries.
    */
   public async dispatch(event: PodeaEvent): Promise<void> {
     console.log(`[EventBus] Dispatching event: ${event.type} for studio: ${event.studioId}`);
+    console.log(`[EventBus] Payload: ${JSON.stringify(event.payload, null, 2)}`);
     
     const currentHandlers = this.handlers.get(event.type) || [];
     
-    // In a production distributed environment, we would publish this to Google Cloud Pub/Sub.
-    // For this architecture, we dispatch to in-memory handlers which act as the bridge.
     const promises = currentHandlers.map(handler => 
-      handler(event).catch(err => {
-        console.error(`[EventBus] Error handling event ${event.type}:`, err);
-        // Here we could implement DLQ (Dead Letter Queue) or retry logic
-      })
+      this.executeWithRetry(handler, event, 3, 500)
     );
 
     await Promise.all(promises);
+  }
+
+  /**
+   * Helper function to execute handler with exponential backoff retries.
+   */
+  private async executeWithRetry(handler: EventHandler, event: PodeaEvent, retriesRemaining: number, delayMs: number): Promise<void> {
+    try {
+      await handler(event);
+    } catch (err) {
+      if (retriesRemaining > 0) {
+        console.warn(`[EventBus] Handler failed for event ${event.type}. Retries remaining: ${retriesRemaining}. Retrying in ${delayMs}ms... Error:`, err);
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+        await this.executeWithRetry(handler, event, retriesRemaining - 1, delayMs * 2);
+      } else {
+        console.error(`[EventBus] Handler failed completely for event ${event.type}. No retries left. Error:`, err);
+      }
+    }
   }
 }
 

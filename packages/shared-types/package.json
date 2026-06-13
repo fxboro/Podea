@@ -1,9 +1,21 @@
 {
   "name": "@podea/shared-types",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "./schemas": "./dist/schemas.js",
+    "./interfaces": "./dist/interfaces.js",
+    ".": "./dist/index.js"
+  },
   "private": true,
+  "scripts": {
+    "build": "tsc"
+  },
   "dependencies": {
     "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
   }
 }

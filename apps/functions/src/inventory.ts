@@ -1,7 +1,7 @@
 import { onDocumentWritten } from 'firebase-functions/v2/firestore';
 import * as logger from 'firebase-functions/logger';
 import { getFirestore } from 'firebase-admin/firestore';
-import { ProductSchema, InventoryLogSchema } from '@podea/shared-types/schemas';
+import { ProductSchema } from '@podea/shared-types/schemas';
 import { Product } from '@podea/shared-types/interfaces';
 
 const db = getFirestore();

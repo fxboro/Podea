@@ -1,0 +1,334 @@
+/* Podea Auth Stylesheet */
+
+.auth-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%;
+  flex: 1;
+  background-color: var(--color-bg-base);
+  position: relative;
+  padding: 40px 20px;
+}
+
+/* Background grid overlay for premium aesthetic */
+.auth-bg-pattern {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: radial-gradient(var(--color-accent) 0.8px, transparent 0.8px);
+  background-size: 24px 24px;
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.auth-card-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 500px;
+}
+
+.auth-card-container.small {
+  max-width: 440px;
+}
+
+.auth-card {
+  background-color: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl) var(--spacing-xl);
+  box-shadow: 0 20px 40px -5px rgba(31, 42, 55, 0.06), var(--shadow-soft);
+  border: 1px solid rgba(199, 167, 93, 0.15);
+  transition: var(--transition-smooth);
+}
+
+.auth-lang-container {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 10;
+}
+
+.auth-lang-btn {
+  background: var(--color-bg-surface);
+  border: 1px solid rgba(31, 42, 55, 0.08);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  color: var(--color-primary-muted);
+  font-weight: 600;
+  font-size: 13px;
+  transition: var(--transition-smooth);
+}
+
+.auth-lang-btn:hover {
+  background-color: rgba(31, 42, 55, 0.04);
+  color: var(--color-primary-text);
+  border-color: rgba(31, 42, 55, 0.15);
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.auth-title {
+  font-family: var(--font-family-serif);
+  font-size: 28px;
+  color: var(--color-primary-text);
+  margin: 0 0 var(--spacing-sm);
+  font-weight: 500;
+  letter-spacing: -0.5px;
+}
+
+.auth-subtitle {
+  color: var(--color-primary-muted);
+  font-size: 15px;
+  margin: 0;
+}
+
+/* Progress Tracker / Multi-Step Indicator */
+.auth-progress {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  position: relative;
+  padding: 0 10px;
+}
+
+.auth-progress::before {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  right: 20px;
+  height: 2px;
+  background-color: rgba(31, 42, 55, 0.08);
+  z-index: 0;
+}
+
+.auth-progress-line {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  height: 2px;
+  background-color: var(--color-accent);
+  z-index: 1;
+  transition: var(--transition-smooth);
+}
+
+.auth-progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.auth-step-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-bg-surface);
+  border: 2px solid rgba(31, 42, 55, 0.1);
+  color: var(--color-primary-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: bold;
+  transition: var(--transition-smooth);
+}
+
+.auth-progress-step.active .auth-step-circle {
+  border-color: var(--color-accent);
+  background-color: var(--color-bg-surface);
+  color: var(--color-accent);
+  box-shadow: 0 0 0 4px rgba(199, 167, 93, 0.15);
+}
+
+.auth-progress-step.completed .auth-step-circle {
+  border-color: var(--color-status-success);
+  background-color: var(--color-status-success);
+  color: #FFFFFF;
+}
+
+.auth-step-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-primary-muted);
+  margin-top: var(--spacing-sm);
+  transition: var(--transition-smooth);
+}
+
+.auth-progress-step.active .auth-step-label {
+  color: var(--color-accent);
+}
+
+.auth-progress-step.completed .auth-step-label {
+  color: var(--color-status-success);
+}
+
+/* Custom form elements */
+.auth-form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.auth-form-grid-3-1 {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.auth-action-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+.auth-action-buttons .podea-btn {
+  flex: 1;
+}
+
+.auth-footer-nav {
+  margin-top: var(--spacing-xl);
+  text-align: center;
+}
+
+.auth-footer-link-btn {
+  font-size: 14px;
+  color: var(--color-primary-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: var(--transition-smooth);
+}
+
+.auth-footer-link-btn:hover {
+  color: var(--color-primary-text);
+  text-decoration: underline;
+}
+
+.auth-accent-link {
+  color: var(--color-accent);
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.auth-accent-link:hover {
+  color: var(--color-accent-hover);
+  text-decoration: underline;
+}
+
+/* Password Strength Indicator */
+.pwd-strength-container {
+  margin-top: -4px;
+  margin-bottom: var(--spacing-md);
+}
+
+.pwd-strength-bars {
+  display: flex;
+  gap: 4px;
+  height: 4px;
+  margin-bottom: 6px;
+}
+
+.pwd-strength-bar {
+  flex: 1;
+  background-color: rgba(31, 42, 55, 0.08);
+  border-radius: var(--radius-pill);
+  transition: var(--transition-smooth);
+}
+
+.pwd-strength-bar.weak {
+  background-color: var(--color-status-warning);
+}
+
+.pwd-strength-bar.fair {
+  background-color: var(--color-accent);
+}
+
+.pwd-strength-bar.strong {
+  background-color: var(--color-status-success);
+}
+
+.pwd-strength-text {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-primary-muted);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Success Card animations */
+.auth-success-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: rgba(74, 108, 92, 0.1);
+  color: var(--color-status-success);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--spacing-lg) auto;
+  font-size: 28px;
+}
+
+.auth-error-block {
+  background-color: var(--color-status-warning-bg);
+  border: 1px solid rgba(190, 90, 90, 0.2);
+  color: var(--color-status-warning);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+  .auth-wrapper {
+    padding: 20px 12px;
+  }
+
+  .auth-card {
+    padding: var(--spacing-xl) var(--spacing-md);
+  }
+
+  .auth-form-grid-2,
+  .auth-form-grid-3-1 {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-sm);
+  }
+
+  .auth-action-buttons {
+    flex-direction: column-reverse;
+    gap: var(--spacing-sm);
+  }
+
+  .auth-action-buttons button,
+  .auth-action-buttons .podea-btn {
+    width: 100%;
+  }
+
+  .auth-title {
+    font-size: 24px;
+  }
+}

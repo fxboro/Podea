@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../lib/firebase';
+import { httpsCallable } from 'firebase/functions';
+import { auth, functions } from '../../lib/firebase';
 import { Button, Input, Card } from '@podea/ui';
+import { useLanguage } from '../../contexts/LanguageContext';
+import './AuthStyles.css';
 
 export const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
+  const { language, setLanguage, t } = useLanguage();
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -18,60 +22,103 @@ export const Login: React.FC = () => {
     setError('');
 
     try {
+      let email = username.trim();
+
+      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if (!isEmail) {
+        const resolveStudioFn = httpsCallable<{ studioName: string }, { email: string }>(functions, 'resolveStudioName');
+        const res = await resolveStudioFn({ studioName: email });
+        email = res.data.email;
+      }
+
       await signInWithEmailAndPassword(auth, email, password);
-      // Protected route automatically routes valid users, but we force push to dashboard boundary
       navigate('/dashboard');
     } catch (err: any) {
-      setError('Login fehlgeschlagen. Bitte überprüfen Sie Ihre Daten.');
+      setError(t('loginFailed'));
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', backgroundColor: 'var(--color-bg-base)' }}>
-      <Card size="large" style={{ width: '100%', maxWidth: '400px' }}>
-        <div style={{ textAlign: 'center', marginBottom: 'var(--spacing-xl)' }}>
-          <h1 className="font-serif" style={{ fontSize: '24px', margin: '0 0 var(--spacing-sm)', color: 'var(--color-primary-text)' }}>Podea</h1>
-          <p style={{ color: 'var(--color-primary-muted)', margin: 0 }}>Willkommen zurück in Ihrem Studio</p>
-        </div>
+    <div className="auth-wrapper">
+      <div className="auth-bg-pattern" />
 
-        <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column' }}>
-          <Input 
-            label="E-Mail Adresse" 
-            type="email" 
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            autoComplete="email"
-          />
-          <Input 
-            label="Passwort" 
-            type="password" 
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            autoComplete="current-password"
-          />
-          
-          {error && <p style={{ color: 'var(--color-status-warning)', fontSize: '14px', marginTop: 'var(--spacing-sm)' }}>{error}</p>}
-          
-          <Button 
-            type="submit" 
-            variant="primary" 
-            style={{ width: '100%', marginTop: 'var(--spacing-md)' }}
-            disabled={isLoading}
-          >
-            {isLoading ? 'Anmelden...' : 'Anmelden'}
-          </Button>
-        </form>
+      {/* Language switcher */}
+      <div className="auth-lang-container">
+        <button className="auth-lang-btn" onClick={() => setLanguage(language === 'de' ? 'en' : 'de')}>
+          {language.toUpperCase()}
+        </button>
+      </div>
 
-        <div style={{ marginTop: 'var(--spacing-xl)', textAlign: 'center', fontSize: '14px' }}>
-          <p style={{ color: 'var(--color-primary-muted)' }}>
-            Kein Studio eingerichtet? <button onClick={() => navigate('/onboarding')} style={{ color: 'var(--color-accent)', fontWeight: 500, background: 'none', border: 'none', cursor: 'pointer' }}>Neues Studio registrieren</button>
-          </p>
-        </div>
-      </Card>
+      <div className="auth-card-container small">
+        <Card className="auth-card">
+          <div className="auth-header">
+            {/* Minimal logo mark */}
+            <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '40px', height: '40px', backgroundColor: 'var(--color-primary-text)', color: '#FFFFFF', borderRadius: '8px', border: '1px solid var(--color-accent)', fontFamily: 'var(--font-family-serif)', fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' }}>
+              P
+            </div>
+            <h1 className="auth-title">{t('loginTitle')}</h1>
+            <p className="auth-subtitle">{t('loginSubtitle')}</p>
+          </div>
+
+          {error && (
+            <div className="auth-error-block">
+              <span>⚠️</span>
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column' }}>
+            <Input 
+              label={t('usernameLabel')} 
+              type="text" 
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              autoComplete="username"
+              autoFocus
+            />
+            <Input 
+              label={t('passwordLabel')} 
+              type="password" 
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              autoComplete="current-password"
+            />
+            
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '4px', marginBottom: '16px' }}>
+              <button 
+                type="button" 
+                onClick={() => navigate('/reset-password')} 
+                className="auth-accent-link"
+                style={{ fontSize: '13px' }}
+              >
+                {t('forgotPassword')}
+              </button>
+            </div>
+            
+            <Button 
+              type="submit" 
+              variant="primary" 
+              style={{ width: '100%' }}
+              disabled={isLoading}
+            >
+              {isLoading ? t('loginLoading') : t('loginBtn')}
+            </Button>
+          </form>
+
+          <div className="auth-footer-nav" style={{ marginTop: '24px' }}>
+            <p style={{ color: 'var(--color-primary-muted)', margin: 0, fontSize: '14px' }}>
+              {t('noStudio')}{' '}
+              <button onClick={() => navigate('/onboarding')} className="auth-accent-link">
+                {t('registerNewStudio')}
+              </button>
+            </p>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 };

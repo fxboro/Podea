@@ -20,13 +20,23 @@ export const UserSchema = baseEntity.extend({
 export const StudioSchema = baseEntity.extend({
   id: z.string().min(1),
   name: z.string().min(1),
-  timezone: z.string().min(1), // e.g., "America/New_York"
-  currency: z.string().min(1), // e.g., "USD"
+  ownerUid: z.string().min(1),
+  ownerName: z.string().min(1),
+  address: z.object({
+    streetName: z.string().min(1),
+    streetNumber: z.string().min(1),
+    cityName: z.string().min(1),
+    cityCode: z.string().optional(),
+    state: z.string().min(1),
+    country: z.string().min(1)
+  }),
+  timezone: z.string().min(1).default('Europe/Berlin'),
+  currency: z.string().min(1).default('EUR'),
   branding: z.object({
     logoUrl: z.string().url().optional(),
     primaryColor: z.string().optional()
   }).optional(),
-  status: z.enum(['active', 'suspended'])
+  status: z.enum(['active', 'suspended']).default('active')
 });
 
 // 3. Tenant Subcollections

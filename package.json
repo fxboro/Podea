@@ -1,0 +1,32 @@
+{
+  "name": "podea---intelligent-studio-check-in",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@google/genai": "^1.46.0",
+    "@heroicons/react": "^2.2.0",
+    "@supabase/supabase-js": "^2.118.0",
+    "@types/d3": "^7.4.3",
+    "d3": "^7.9.0",
+    "motion": "^12.38.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-signature-canvas": "^1.1.0-alpha.2",
+    "recharts": "^3.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/react-signature-canvas": "^1.0.7",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0",
+    "vite-plugin-pwa": "^2.0.0"
+  }
+}

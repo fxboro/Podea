@@ -1,0 +1,6 @@
+{
+  "summary": "Implementation plan detailing Supabase integration for secure authentication (Email/Password & Google OAuth) and strict Role-Based Access Control (RBAC) gating for Studio Admin, Practitioners, and Check-in Tablet terminals.",
+  "updatedAt": "2026-10-20T09:14:47.839285054Z",
+  "requestFeedback": true,
+  "userFacing": true
+}

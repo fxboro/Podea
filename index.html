@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <title>Podea - Intelligent Studio Check-in</title>
+    
+    <!-- SEO & Metadata -->
+    <meta name="description" content="Podea ist die intelligente Check-in- und Compliance-Plattform für medizinische Fußpflege-, Wellness- und Beauty-Studios." />
+    <meta name="keywords" content="Podea, Studio Check-in, Fußpflege, Podologie, Anamnese, Tablet Check-in, Medical Wellness, Digitaler Empfang" />
+    <meta name="author" content="Podea" />
+
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Podea - Intelligent Studio Check-in" />
+    <meta property="og:description" content="Intelligente Check-in- und Compliance-Plattform für medizinische Fußpflege-, Wellness- und Beauty-Studios." />
+    <meta property="og:site_name" content="Podea" />
+    <meta property="og:image" content="/pwa-512x512.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Podea - Intelligent Studio Check-in" />
+    <meta name="twitter:description" content="Intelligente Check-in- und Compliance-Plattform für medizinische Fußpflege-, Wellness- und Beauty-Studios." />
+    <meta name="twitter:image" content="/pwa-512x512.png" />
+
+    <!-- PWA Standard & Mobile Web App Meta -->
+    <meta name="theme-color" content="#1F2A37" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Podea" />
+    <meta name="application-name" content="Podea" />
+
+    <!-- Favicon & Icons -->
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="alternate icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Schema.org Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Podea - Intelligent Studio Check-in",
+      "shortName": "Podea",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "All",
+      "description": "Intelligente Check-in- und Compliance-Plattform für medizinische Fußpflege-, Wellness- und Beauty-Studios.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "EUR"
+      }
+    }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'p-primary': '#1F2A37',    // Deep Slate Blue (Trust, Professionalism)
+                        'p-background': '#F4EFEA', // Warm Ivory (Calm, Organic)
+                        'p-surface': '#FCFAF8',    // Lighter Ivory for cards/inputs
+                        'p-accent': '#C7A75D',     // Soft Champagne (Luxury, Highlight)
+                        'p-success': '#4A6C5C',    // Deep Sage (Natural, Reassuring)
+                        'p-warning': '#BE5A5A',    // Rose Clay (Alert but not aggressive)
+                        'p-text': '#4B5563',       // Soft Gray for body text
+                        'p-stone': '#E7E5E4',      // Subtle borders
+                    },
+                    fontFamily: {
+                        'sans': ['"Inter"', 'sans-serif'],
+                        'serif': ['"Playfair Display"', 'serif'],
+                    },
+                    borderRadius: {
+                      'xl': '16px', // Softer curves
+                      '2xl': '24px',
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 20px -2px rgba(31, 42, 55, 0.05)', // Very subtle luxury shadow
+                        'glow': '0 0 15px rgba(199, 167, 93, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <script type="importmap">
+    {
+      "imports": {
+        "react/": "https://esm.sh/react@^19.2.4/",
+        "react": "https://esm.sh/react@^19.2.4",
+        "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+        "@heroicons/react/": "https://esm.sh/@heroicons/react@^2.2.0/"
+      }
+    }
+    </script>
+    <style>
+        @media print {
+            .print\:hidden,
+            .no-print,
+            header,
+            nav,
+            button,
+            .mobile-bottom-nav {
+                display: none !important;
+            }
+            .print\:block {
+                display: block !important;
+            }
+            body, html, #root {
+                background: #ffffff !important;
+                background-color: #ffffff !important;
+                color: #111827 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                min-height: auto !important;
+            }
+            @page {
+                size: A4 portrait;
+                margin: 12mm 15mm 15mm 15mm;
+            }
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .page-break-inside-avoid {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body class="bg-p-background font-sans text-p-text antialiased selection:bg-p-accent selection:text-white">
+<div id="root"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>

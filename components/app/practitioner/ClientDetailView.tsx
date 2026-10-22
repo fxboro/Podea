@@ -28,6 +28,7 @@ import {
     PrinterIcon
 } from '@heroicons/react/24/outline';
 import PrintableInvoiceSummary from './PrintableInvoiceSummary';
+import PractitionerFAB from './PractitionerFAB';
 
 const TreatmentHistoryTimeline: React.FC<{ client: Client }> = ({ client }) => {
     const { t } = useLanguage();
@@ -1282,6 +1283,18 @@ const ClientDetailView: React.FC<{ setView: (view: View) => void; client: Client
                 onClosePreview={() => setShowInvoicePreview(false)}
             />
         )}
+
+        {/* Floating Action Button (FAB) for Quick Notes & Immediate Upsell */}
+        <PractitionerFAB
+            currentClient={client}
+            onUpdateClient={onUpdateClient}
+            onNoteAdded={() => {
+                setRecentNoteAuditTime(new Date().toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }));
+                setNoteSavedFeedback(true);
+                setTimeout(() => setNoteSavedFeedback(false), 3000);
+            }}
+            className="bottom-32 right-4 sm:bottom-32 sm:right-6 lg:bottom-8 lg:right-8"
+        />
         </>
     );
 };

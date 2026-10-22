@@ -93,7 +93,7 @@ const DemoApp: React.FC<DemoAppProps> = ({ initialView, setView }) => {
             case 'practitionerArrivals':
                 return (
                     <RoleGate allowedRoles={['practitioner', 'admin']} setView={setCurrentView} currentViewName={t({ de: 'Behandler/in Ankünfte', en: 'Practitioner Arrivals' })}>
-                        <PractitionerArrivals setView={setCurrentView} onSelectClient={handleSelectClient} clients={allClients} />
+                        <PractitionerArrivals setView={setCurrentView} onSelectClient={handleSelectClient} clients={allClients} onUpdateClient={handleUpdateClient} />
                     </RoleGate>
                 );
             case 'practitionerClient':

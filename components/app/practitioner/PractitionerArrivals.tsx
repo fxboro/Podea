@@ -16,6 +16,7 @@ import {
     MagnifyingGlassIcon,
     XMarkIcon
 } from '@heroicons/react/24/outline';
+import PractitionerFAB from './PractitionerFAB';
 
 export type SortOption = 'earliest' | 'name' | 'priority';
 
@@ -23,9 +24,10 @@ interface PractitionerArrivalsProps {
     setView: (view: View) => void;
     onSelectClient: (client: Client) => void;
     clients: Client[];
+    onUpdateClient?: (client: Client) => void;
 }
 
-const PractitionerArrivals: React.FC<PractitionerArrivalsProps> = ({ setView, onSelectClient, clients }) => {
+const PractitionerArrivals: React.FC<PractitionerArrivalsProps> = ({ setView, onSelectClient, clients, onUpdateClient }) => {
     const { t, language } = useLanguage();
     const isEnglish = language === 'en';
 
@@ -457,6 +459,13 @@ const PractitionerArrivals: React.FC<PractitionerArrivalsProps> = ({ setView, on
                     </div>
                 )}
             </main>
+
+            {/* Floating Action Button (FAB) for Quick Notes & Immediate Upsell */}
+            <PractitionerFAB
+                availableClients={practitionerClients}
+                onUpdateClient={onUpdateClient || (() => {})}
+                className="bottom-20 right-4 sm:bottom-24 sm:right-6 md:bottom-8 md:right-8"
+            />
         </div>
     );
 };
